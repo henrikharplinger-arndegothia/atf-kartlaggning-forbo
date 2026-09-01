@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATF - Kartläggning för lokalt avtal | Forbo</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --forbo-blue: #006cb7;
+            --forbo-dark: #2d4156;
+            --forbo-red: #c60f13;
+            --forbo-light: #eff2f3;
+            --forbo-border: #cacaca;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--forbo-light);
+            color: #333;
+            line-height: 1.6;
+        }
+        .site-bar {
+            background: var(--forbo-dark);
+            color: white;
+            font-size: 0.78em;
+        }
+        .site-bar-inner, .brand-row {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        .site-bar-inner {
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            letter-spacing: 0.02em;
+        }
+        .brand-row {
+            min-height: 86px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+        }
+        .brand-wrap { background: white; border-bottom: 1px solid #e6e6e6; }
+        .wordmark {
+            color: var(--forbo-blue);
+            font-size: 1.65em;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+        }
+        .wordmark span {
+            display: block;
+            color: #767676;
+            font-size: 0.42em;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .context-label {
+            color: #767676;
+            font-size: 0.82em;
+            text-align: right;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 34px 20px 60px;
+        }
+        header {
+            background: var(--forbo-dark);
+            color: white;
+            padding: 38px 36px;
+            text-align: left;
+            margin-bottom: 24px;
+            border-left: 7px solid var(--forbo-red);
+        }
+        header h1 { font-size: 1.8em; margin-bottom: 8px; }
+        header p { opacity: 0.85; font-size: 0.95em; }
+        header .header-actions { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+        header .header-action {
+            background: white;
+            color: var(--forbo-dark);
+            padding: 9px 18px;
+            font-size: 0.82em;
+            border-radius: 0;
+        }
+
+        .progress-bar {
+            background: #dfe3e5;
+            border-radius: 0;
+            height: 6px;
+            margin: 20px 0 30px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: var(--forbo-red);
+            height: 100%;
+            border-radius: 0;
+            transition: width 0.4s ease;
+        }
+        .progress-text {
+            text-align: center;
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 0;
+            padding: 34px;
+            margin-bottom: 20px;
+            border-top: 4px solid var(--forbo-blue);
+            box-shadow: 0 2px 8px rgba(45,65,86,0.10);
+            display: none;
+        }
+        .section.active { display: block; }
+        .section h2 {
+            font-size: 1.3em;
+            margin-bottom: 6px;
+            color: var(--forbo-dark);
+        }
+        .section .section-desc {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 16px;
+        }
+
+        .question {
+            margin-bottom: 28px;
+        }
+        .question label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        .question .help-text {
+            font-size: 0.82em;
+            color: #888;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .radio-group { display: flex; flex-direction: column; gap: 8px; }
+        .radio-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 16px;
+            border: 2px solid #e8e8e8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .radio-option:hover { border-color: var(--forbo-blue); background: #f5f9fc; }
+        .radio-option.selected { border-color: var(--forbo-blue); background: #edf6fc; }
+        .radio-option input[type="radio"] { margin-top: 3px; accent-color: var(--forbo-blue); }
+        .radio-option .option-content { flex: 1; }
+        .radio-option .option-label { font-weight: 500; font-size: 0.93em; }
+        .radio-option .option-desc { font-size: 0.82em; color: #777; margin-top: 2px; }
+
+        .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+        .checkbox-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 16px;
+            border: 2px solid #e8e8e8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .checkbox-option:hover { border-color: var(--forbo-blue); background: #f5f9fc; }
+        .checkbox-option.selected { border-color: var(--forbo-blue); background: #edf6fc; }
+        .checkbox-option input[type="checkbox"] { margin-top: 3px; accent-color: var(--forbo-blue); }
+
+        input[type="text"], input[type="date"], input[type="number"], textarea, select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 0;
+            font-size: 0.93em;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--forbo-blue);
+        }
+        textarea { resize: vertical; min-height: 80px; }
+        select { background: white; cursor: pointer; }
+
+        .btn-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 24px;
+            gap: 12px;
+        }
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 0;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn-prev {
+            background: #e8e8e8;
+            color: #555;
+        }
+        .btn-prev:hover { background: #d0d0d0; }
+        .btn-next {
+            background: var(--forbo-red);
+            color: white;
+            margin-left: auto;
+        }
+        .btn-next:hover { background: #a90d10; }
+        .btn-next:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn-export {
+            background: var(--forbo-red);
+            color: white;
+            width: 100%;
+            padding: 16px;
+            font-size: 1.05em;
+        }
+        .btn-export:hover { background: #a90d10; }
+        .btn-secondary { background: var(--forbo-blue) !important; }
+        .btn-neutral { background: var(--forbo-dark) !important; }
+
+        /* Summary */
+        #summary-section .summary-group {
+            margin-bottom: 20px;
+        }
+        #summary-section .summary-group h3 {
+            font-size: 1em;
+            color: var(--forbo-blue);
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #eee;
+        }
+        #summary-section .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 0.9em;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        #summary-section .summary-item .sq { color: #888; flex: 1; }
+        #summary-section .summary-item .sa { font-weight: 600; flex: 1; text-align: right; }
+
+        .alert {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-size: 0.88em;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .alert strong { color: #856404; }
+
+        details.info-box {
+            background: #f0f4ff;
+            border: 1px solid #c5d4f0;
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 24px;
+        }
+        details.info-box summary {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            color: var(--forbo-blue);
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        details.info-box summary::before {
+            content: '?';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--forbo-blue);
+            color: white;
+            font-size: 0.8em;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        details.info-box summary::-webkit-details-marker { display: none; }
+        details.info-box .info-content {
+            padding: 0 16px 14px;
+            font-size: 0.85em;
+            color: #333;
+            line-height: 1.6;
+        }
+        details.info-box .info-content p { margin-bottom: 8px; }
+        details.info-box .info-content strong { color: var(--forbo-dark); }
+        .send-status {
+            display: none;
+            padding: 14px 16px;
+            margin-top: 12px;
+            background: #edf6fc;
+            border-left: 4px solid var(--forbo-blue);
+            font-size: 0.88em;
+        }
+        .send-status.visible { display: block; }
+        details.info-box .info-content ul {
+            margin: 6px 0 8px 18px;
+            padding: 0;
+        }
+        details.info-box .info-content li { margin-bottom: 3px; }
+
+        @media (max-width: 600px) {
+            .container { padding: 12px; }
+            .section { padding: 20px 16px; }
+            header { padding: 28px 16px; }
+            header h1 { font-size: 1.4em; }
+            .btn { padding: 10px 20px; font-size: 0.88em; }
+            .site-bar-inner, .brand-row { padding-left: 16px; padding-right: 16px; }
+            .context-label { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="site-bar">
+    <div class="site-bar-inner">
+        <span>Internt arbetsmaterial</span>
+        <span>Arbetstidsförkortning</span>
+    </div>
+</div>
+<div class="brand-wrap">
+    <div class="brand-row">
+        <div class="wordmark">Forbo<span>Underlag för lokal överenskommelse</span></div>
+        <div class="context-label">Frågeunderlag till Karin Hellström<br>Livsarbetstidsmodellen 2025</div>
+    </div>
+</div>
+
+<div class="container">
+    <header>
+        <h1>Kartläggning: Lokalt avtal om ATF</h1>
+        <p>Livsarbetstidsmodellen enligt IKEM:s tillämpningsanvisning 2025</p>
+        <p style="opacity:0.6; font-size:0.8em; margin-top: 8px;">Dina svar sparas automatiskt. Använd knapparna nedan om du behöver stänga och återkomma senare.</p>
+        <div class="header-actions">
+            <button class="btn header-action" onclick="saveToFile()">Spara svar till fil</button>
+            <label class="btn header-action" style="cursor: pointer;">
+                Ladda sparade svar
+                <input type="file" accept=".json" style="display:none;" onchange="loadFromFile(event)">
+            </label>
+        </div>
+    </header>
+
+    <details class="info-box">
+        <summary>Vad är Livsarbetstidsmodellen?</summary>
+        <div class="info-content">
+            <p>En <strong>trevalsmodell</strong> där arbetsgivaren varje år sätter av 2,5% (fr.o.m. 2026) av din lön till ett individuellt arbetstidskonto. Du väljer sedan hur pengarna ska användas:</p>
+            <ul>
+                <li><strong>Betald ledig tid</strong> -- extra lediga dagar (5 dagar vid grundvärdet)</li>
+                <li><strong>Pensionspremie</strong> -- högre pension eller tidigare pensionering</li>
+                <li><strong>Kontant ersättning</strong> -- engångsbelopp (beskattas som lön)</li>
+            </ul>
+            <p>Valet görs en gång per år. Gör du inget val betalas det ut kontant.</p>
+        </div>
+    </details>
+
+    <div class="progress-text" id="progress-text">Avsnitt 1 av 6</div>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width: 16.6%"></div>
+    </div>
+
+    <!-- SECTION 1: Företagsinformation -->
+    <div class="section active" id="section-1">
+        <h2>1. Företagsinformation</h2>
+        <p class="section-desc">Grundläggande uppgifter om ert företag och nuvarande situation.</p>
+
+        <div class="question">
+            <label for="company-name">Företagsnamn</label>
+            <input type="text" id="company-name" placeholder="AB Exempel">
+        </div>
+
+        <div class="question">
+            <label for="org-nr">Organisationsnummer</label>
+            <input type="text" id="org-nr" placeholder="XXXXXX-XXXX">
+        </div>
+
+        <details class="info-box">
+            <summary>Vad är ett individuellt arbetstidskonto?</summary>
+            <div class="info-content">
+                <p>Ett <strong>sparkonto hos arbetsgivaren</strong> för varje tjänsteman. Arbetsgivaren beräknar årligen 2,5% av din lön och bokför det som belopp och antal dagar.</p>
+                <p>Du får besked om avsättningens storlek och meddelar sedan hur du vill använda den (tid, pension eller pengar). Vid deltid eller frånvaro reduceras dagarna proportionellt.</p>
+            </div>
+        </details>
+
+        <div class="question">
+            <label for="num-employees">Antal tjänstemän som omfattas av avtalet</label>
+            <div class="help-text">Individuella arbetstidskonton ska tillämpas för alla tjänstemän som omfattas av avtalet om allmänna anställningsvillkor.</div>
+            <input type="number" id="num-employees" min="1" placeholder="t.ex. 45">
+        </div>
+
+        <div class="question">
+            <label for="contact-person">Kontaktperson (arbetsgivarsidan)</label>
+            <input type="text" id="contact-person" placeholder="Namn och roll">
+        </div>
+
+        <div class="question">
+            <label for="union-contact">Lokal tjänstemannapart (facklig kontakt)</label>
+            <div class="help-text">Vilken/vilka lokala klubbar finns? (Unionen, Sveriges Ingenjörer, Naturvetarna, Ledarna)</div>
+            <input type="text" id="union-contact" placeholder="t.ex. Unionen-klubben, kontaktperson">
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-next" onclick="goTo(2)">Nästa</button>
+        </div>
+    </div>
+
+    <!-- SECTION 2: Historiska avtal -->
+    <div class="section" id="section-2">
+        <h2>2. Historiska avtal och nuvarande situation</h2>
+        <p class="section-desc">Er historik avgör grundvärdet i Livsarbetstidsmodellen.</p>
+
+        <div class="question">
+            <label>Har företaget lokala överenskommelser om arbetstidsförkortning (ATF) från perioden 1998-2001?</label>
+            <div class="help-text">Under 1998-2001 kunde lokala parter träffa avtal om 1, 2 eller 3 dagars betald ledighet. Om sådana avtal finns kan de anpassas till Livsarbetstidsmodellen med +0,5% per dag.</div>
+            <div class="radio-group">
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="atf-history" value="none">
+                    <div class="option-content">
+                        <div class="option-label">Nej, inga sådana avtal finns</div>
+                        <div class="option-desc">Grundvärdet blir 2,5% (fr.o.m. 31/3 2026), motsvarande 5 dagar.</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="atf-history" value="1">
+                    <div class="option-content">
+                        <div class="option-label">Ja, 1 dags arbetstidsförkortning</div>
+                        <div class="option-desc">Kan anpassas till +0,5%. Totalt 3,0% (2026), motsvarande 6 dagar.</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="atf-history" value="2">
+                    <div class="option-content">
+                        <div class="option-label">Ja, 2 dagars arbetstidsförkortning</div>
+                        <div class="option-desc">Kan anpassas till +1,0%. Totalt 3,5% (2026), motsvarande 7 dagar.</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="atf-history" value="3">
+                    <div class="option-content">
+                        <div class="option-label">Ja, 3 dagars arbetstidsförkortning</div>
+                        <div class="option-desc">Kan anpassas till +1,5%. Totalt 4,0% (2026), motsvarande 8 dagar. (Max inom modellen: 4,125% / 8,25 dagar)</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="atf-history" value="unknown">
+                    <div class="option-content">
+                        <div class="option-label">Osäkert / behöver utredas</div>
+                        <div class="option-desc">Kolla med IKEM:s rådgivning eller äldre dokumentation.</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <label>Vill ni anpassa dessa gamla ATF-dagar till Livsarbetstidsmodellen?</label>
+            <div class="help-text">Om ja, integreras de i trevalsmodellen (tid/pension/kontant). Om nej, behålls de som separata fasta lediga dagar utanför modellen.</div>
+            <div class="radio-group">
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="atf-integrate" value="yes">
+                    <div class="option-content">
+                        <div class="option-label">Ja, integrera i Livsarbetstidsmodellen</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="atf-integrate" value="no">
+                    <div class="option-content">
+                        <div class="option-label">Nej, behåll som separata lediga dagar</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="atf-integrate" value="na">
+                    <div class="option-content">
+                        <div class="option-label">Ej aktuellt (inga gamla avtal)</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <label for="current-practice">Beskriv kort hur ert nuvarande (oskrivna) ATF-avtal fungerar i praktiken</label>
+            <div class="help-text">T.ex. "alla får X dagar ledigt", "det betalas ut som ett engångsbelopp i juni", etc.</div>
+            <textarea id="current-practice" placeholder="Beskriv nuvarande praxis..."></textarea>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-prev" onclick="goTo(1)">Tillbaka</button>
+            <button class="btn btn-next" onclick="goTo(3)">Nästa</button>
+        </div>
+    </div>
+
+    <!-- SECTION 3: Intjänandeperiod & beräkning -->
+    <div class="section" id="section-3">
+        <h2>3. Intjänandeperiod och beräkning</h2>
+        <p class="section-desc">Välj vilka administrativa modeller ni vill tillämpa.</p>
+
+        <div class="question">
+            <label>Vilken intjänandeperiod vill ni använda?</label>
+            <div class="help-text">Detta avgör alla tidpunkter för avsättning, val, utbetalning m.m.</div>
+            <div class="radio-group">
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="earning-period" value="main">
+                    <div class="option-content">
+                        <div class="option-label">Huvudregel: 1 april - 31 mars</div>
+                        <div class="option-desc">Avsättning 31 mars. Uppgift till anställda: maj. Val: juni. Utbetalning: juli.</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="earning-period" value="calendar">
+                    <div class="option-content">
+                        <div class="option-label">Kalenderår: 1 januari - 31 december</div>
+                        <div class="option-desc">Avsättning 31 dec. Uppgift till anställda: feb. Val: mars. Utbetalning: april.</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <label>Vilken beräkningsmodell för betald ledig tid vill ni använda?</label>
+            <div class="help-text">Dagberäkning är enklare. Procentberäkning ger mer exakt resultat och möjlighet att spara överskjutande tid.</div>
+            <div class="radio-group">
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="calc-model" value="days">
+                    <div class="option-content">
+                        <div class="option-label">Dagberäkning (huvudregel)</div>
+                        <div class="option-desc">Antal lediga dagar = (timmar i beräkningsunderlag / totala arbetstimmar) x antal dagar. Enklare att administrera.</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="calc-model" value="percent">
+                    <div class="option-content">
+                        <div class="option-label">Procentberäkning (alternativ regel)</div>
+                        <div class="option-desc">Ledig tid = 2,5% av faktiskt arbetade timmar. Ger möjlighet att spara överskjutande tid till nästa år.</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-prev" onclick="goTo(2)">Tillbaka</button>
+            <button class="btn btn-next" onclick="goTo(4)">Nästa</button>
+        </div>
+    </div>
+
+    <!-- SECTION 4: Nationaldagen & kollektiv ledighet -->
+    <div class="section" id="section-4">
+        <h2>4. Nationaldagen och kollektiv ledighet</h2>
+        <p class="section-desc">Hantering av nationaldagskompensation och eventuella kollektiva lediga dagar.</p>
+
+        <div class="question">
+            <label>Hur vill ni hantera nationaldagsfrågan?</label>
+            <div class="help-text">Sedan 2007 kompenseras tjänstemän som arbetar dagtid med 2 timmar/år (0,125%) för att nationaldagen blev helgdag istället för annandag pingst. De lokala parterna ska komma överens om hur detta hanteras.</div>
+            <div class="radio-group">
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="national-day" value="local">
+                    <div class="option-content">
+                        <div class="option-label">Hantera lokalt (t.ex. extra ledig dag de år 6 juni infaller lör/sön)</div>
+                        <div class="option-desc">Parterna bestämmer själva hur kompensationen ges.</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="national-day" value="model">
+                    <div class="option-content">
+                        <div class="option-label">Lägg in i Livsarbetstidsmodellen (+0,125%)</div>
+                        <div class="option-desc">Värdet adderas till arbetstidskontot. I företag med pensionspremie som huvudalternativ åsätts 0,125%.</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="national-day" value="na">
+                    <div class="option-content">
+                        <div class="option-label">Ej aktuellt (kontinuerligt 3-skift / storhelgsdrift)</div>
+                        <div class="option-desc">Gäller inte för tjänstemän i kontinuerligt 3-skift med storhelgsstopp om arbetet stoppas på nationaldagen.</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <details class="info-box">
+            <summary>Vad är kollektiva lediga dagar?</summary>
+            <div class="info-content">
+                <p>Normalt väljer varje tjänsteman individuellt. Men arbetsgivare och fack kan komma överens om att <strong>en eller flera dagar blir gemensam ledighet för alla</strong> -- t.ex. klämdagar eller dag före midsommar.</p>
+                <p>Resterande dagar disponerar tjänstemannen själv via trevalsmodellen. Kräver lokal överenskommelse och minskar det individuella valet.</p>
+            </div>
+        </details>
+
+        <div class="question">
+            <label>Vill ni ha kollektiva lediga dagar?</label>
+            <div class="help-text">Det är möjligt att lokalt komma överens om att hela eller delar av värdet tas ut som kollektiva lediga dagar (t.ex. klämdagar).</div>
+            <div class="radio-group">
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="collective-days" value="yes">
+                    <div class="option-content">
+                        <div class="option-label">Ja, vi vill ha kollektiva lediga dagar</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="collective-days" value="no">
+                    <div class="option-content">
+                        <div class="option-label">Nej, helt individuellt val</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="question" id="collective-days-detail" style="display:none;">
+            <label for="collective-days-desc">Vilka dagar / hur många dagar?</label>
+            <textarea id="collective-days-desc" placeholder="T.ex. Klämdagar, dag före midsommar, mellandagar vid jul..."></textarea>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-prev" onclick="goTo(3)">Tillbaka</button>
+            <button class="btn btn-next" onclick="goTo(5)">Nästa</button>
+        </div>
+    </div>
+
+    <!-- SECTION 5: Pension & administration -->
+    <div class="section" id="section-5">
+        <h2>5. Pension och administration</h2>
+        <p class="section-desc">Hantering av pensionspremie och praktiska frågor.</p>
+
+        <div class="question">
+            <label>Ska pensionspremie hanteras via Collectum (standard) eller annan förvaltare?</label>
+            <div class="help-text">Lokala parter kan komma överens om att utse en särskild förvaltare. I sådant fall gäller inte administrationsavtalet.</div>
+            <div class="radio-group">
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="pension-provider" value="collectum">
+                    <div class="option-content">
+                        <div class="option-label">Collectum (standard)</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="pension-provider" value="other">
+                    <div class="option-content">
+                        <div class="option-label">Annan förvaltare</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="question" id="other-provider-detail" style="display:none;">
+            <label for="other-provider">Vilken förvaltare?</label>
+            <input type="text" id="other-provider" placeholder="Namn på förvaltare">
+        </div>
+
+        <div class="question">
+            <label>Vilket lönesystem använder ni?</label>
+            <div class="help-text">Behöver konfigureras för att beräkna avsättningar och hantera arbetstidskonton.</div>
+            <input type="text" id="payroll-system" placeholder="T.ex. Hogia, Visma, Kontek, SAP...">
+        </div>
+
+        <div class="question">
+            <label>Har ni redan individuella arbetstidskonton uppsatta i lönesystemet?</label>
+            <div class="radio-group">
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="has-accounts" value="yes">
+                    <div class="option-content">
+                        <div class="option-label">Ja</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="has-accounts" value="no">
+                    <div class="option-content">
+                        <div class="option-label">Nej, behöver sättas upp</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="has-accounts" value="unsure">
+                    <div class="option-content">
+                        <div class="option-label">Osäkert</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <label for="desired-start">Önskat startdatum för det nya avtalet</label>
+            <div class="help-text">Tänk på att intjänandeperioden bör matcha (1 april eller 1 januari). Övergångsbestämmelser kan behövas.</div>
+            <input type="date" id="desired-start">
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-prev" onclick="goTo(4)">Tillbaka</button>
+            <button class="btn btn-next" onclick="goTo(6)">Nästa</button>
+        </div>
+    </div>
+
+    <!-- SECTION 6: Övrigt & Sammanfattning -->
+    <div class="section" id="section-6">
+        <h2>6. Övriga frågor</h2>
+        <p class="section-desc">Eventuella särskilda omständigheter och kommentarer.</p>
+
+        <div class="question">
+            <label>Vad ska vara standardvalet om tjänstemannen inte gör något aktivt val?</label>
+            <div class="help-text">Enligt tillämpningsreglerna: vid ickeval utges avsättningen som kontant ersättning.</div>
+            <div class="radio-group">
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="default-choice" value="cash">
+                    <div class="option-content">
+                        <div class="option-label">Kontant ersättning (enligt avtalets huvudregel)</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="default-choice" value="time">
+                    <div class="option-content">
+                        <div class="option-label">Betald ledig tid</div>
+                        <div class="option-desc">Avviker från avtalet - kräver lokal överenskommelse.</div>
+                    </div>
+                </label>
+                <label class="radio-option" onclick="selectRadio(this)">
+                    <input type="radio" name="default-choice" value="pension">
+                    <div class="option-content">
+                        <div class="option-label">Pensionspremie</div>
+                        <div class="option-desc">Avviker från avtalet - kräver lokal överenskommelse.</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <label for="special-groups">Finns det särskilda personalgrupper att ta hänsyn till?</label>
+            <div class="help-text">T.ex. skiftarbetare, deltidsanställda, visstidsanställda. Dessa kan påverka beräkningsunderlaget.</div>
+            <textarea id="special-groups" placeholder="Beskriv eventuella särskilda grupper..."></textarea>
+        </div>
+
+        <div class="question">
+            <label for="transition-concerns">Finns det särskilda övergångsfrågor ni behöver hantera?</label>
+            <div class="help-text">T.ex. innestående tid/pengar från det gamla systemet, pågående intjänandeperiod, etc.</div>
+            <textarea id="transition-concerns" placeholder="Beskriv eventuella övergångsfrågor..."></textarea>
+        </div>
+
+        <div class="question">
+            <label for="other-notes">Övriga kommentarer eller frågor</label>
+            <textarea id="other-notes" placeholder="Ytterligare information som kan vara relevant..."></textarea>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-prev" onclick="goTo(5)">Tillbaka</button>
+            <button class="btn btn-next" onclick="showSummary()">Visa sammanfattning</button>
+        </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="section" id="summary-section">
+        <h2>Sammanfattning av svar</h2>
+        <p class="section-desc">Granska era svar. Dessa ligger till grund för utformningen av det lokala avtalet.</p>
+
+        <div class="alert">
+            <strong>Observera:</strong> Denna sammanfattning ersätter inte juridisk rådgivning. Kontakta IKEM:s rådgivning för stöd i den formella avtalsprocessen.
+        </div>
+
+        <div id="summary-content"></div>
+
+        <div class="btn-row" style="flex-direction: column; gap: 12px;">
+            <button class="btn btn-export" id="save-send-button" onclick="confirmSaveAndSend()">Spara och skicka</button>
+            <div class="send-status" id="send-status" role="status" aria-live="polite"></div>
+            <button class="btn btn-prev" style="width: 100%; text-align: center;" onclick="goTo(1)">Tillbaka till start</button>
+            <button class="btn" style="width: 100%; text-align: center; background: #dc3545; color: white; margin-top: 8px;" onclick="clearStorage()">Radera alla sparade svar</button>
+        </div>
+    </div>
+
+</div>
+
+<script src="vendor/jspdf.umd.min.js"></script>
+<script>
+    const STORAGE_KEY = 'atf-kartlaggning';
+    let currentSection = 1;
+    const totalSections = 6;
+
+    // All saveable field IDs and radio group names
+    const textFields = [
+        'company-name', 'org-nr', 'num-employees', 'contact-person', 'union-contact',
+        'current-practice', 'collective-days-desc', 'other-provider', 'payroll-system',
+        'desired-start', 'special-groups', 'transition-concerns', 'other-notes'
+    ];
+    const radioGroups = [
+        'atf-history', 'atf-integrate', 'earning-period', 'calc-model',
+        'national-day', 'collective-days', 'pension-provider', 'has-accounts', 'default-choice'
+    ];
+
+    function gatherFormData() {
+        const data = {};
+        textFields.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) data[id] = el.value;
+        });
+        radioGroups.forEach(name => {
+            const el = document.querySelector(`input[name="${name}"]:checked`);
+            if (el) data['radio_' + name] = el.value;
+        });
+        data._currentSection = currentSection;
+        data._savedAt = new Date().toISOString();
+        return data;
+    }
+
+    function applyFormData(data) {
+        textFields.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && data[id] !== undefined) el.value = data[id];
+        });
+        radioGroups.forEach(name => {
+            const val = data['radio_' + name];
+            if (!val) return;
+            const input = document.querySelector(`input[name="${name}"][value="${val}"]`);
+            if (!input) return;
+            input.checked = true;
+            const option = input.closest('.radio-option');
+            if (option) {
+                option.closest('.radio-group').querySelectorAll('.radio-option').forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+            }
+        });
+
+        if (data['radio_collective-days'] === 'yes') {
+            document.getElementById('collective-days-detail').style.display = 'block';
+        }
+        if (data['radio_pension-provider'] === 'other') {
+            document.getElementById('other-provider-detail').style.display = 'block';
+        }
+    }
+
+    function saveToStorage() {
+        const data = gatherFormData();
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+    }
+
+    function saveToFile() {
+        const data = gatherFormData();
+        const companyName = data['company-name'] || 'atf';
+        const safeName = companyName.replace(/[^a-zåäöA-ZÅÄÖ0-9]/g, '_').toLowerCase();
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `atf-svar-${safeName}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        alert('Svarsfil sparad! Behåll filen om du vill fortsätta senare.');
+    }
+
+    function loadFromFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                applyFormData(data);
+                saveToStorage();
+                if (data._currentSection) goTo(data._currentSection);
+                alert('Svar återställda!');
+            } catch(err) {
+                alert('Kunde inte läsa filen. Kontrollera att det är en giltig svarsfil (.json).');
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = '';
+    }
+
+    function loadFromStorage() {
+        let data;
+        try { data = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) {}
+        if (!data) return;
+
+        applyFormData(data);
+
+        if (data._currentSection) {
+            goTo(data._currentSection);
+        }
+    }
+
+    function clearStorage() {
+        if (confirm('Vill du radera alla sparade svar? Detta kan inte ångras.')) {
+            localStorage.removeItem(STORAGE_KEY);
+            location.reload();
+        }
+    }
+
+    // Auto-save on any input change
+    document.addEventListener('input', saveToStorage);
+    document.addEventListener('change', saveToStorage);
+
+    function goTo(n) {
+        document.getElementById(`section-${currentSection}`).classList.remove('active');
+        document.getElementById('summary-section').classList.remove('active');
+        currentSection = n;
+        document.getElementById(`section-${n}`).classList.add('active');
+        updateProgress(n);
+        saveToStorage();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateProgress(n) {
+        const pct = (n / totalSections) * 100;
+        document.getElementById('progress-fill').style.width = pct + '%';
+        document.getElementById('progress-text').textContent = `Avsnitt ${n} av ${totalSections}`;
+    }
+
+    function selectRadio(el) {
+        const group = el.closest('.radio-group');
+        group.querySelectorAll('.radio-option').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+        el.querySelector('input[type="radio"]').checked = true;
+
+        // Show/hide conditional fields
+        const name = el.querySelector('input[type="radio"]').name;
+        if (name === 'collective-days') {
+            const val = el.querySelector('input[type="radio"]').value;
+            document.getElementById('collective-days-detail').style.display = val === 'yes' ? 'block' : 'none';
+        }
+        if (name === 'pension-provider') {
+            const val = el.querySelector('input[type="radio"]').value;
+            document.getElementById('other-provider-detail').style.display = val === 'other' ? 'block' : 'none';
+        }
+        saveToStorage();
+    }
+
+    function getRadioValue(name) {
+        const el = document.querySelector(`input[name="${name}"]:checked`);
+        return el ? el.value : '(ej besvarat)';
+    }
+
+    function getRadioLabel(name) {
+        const el = document.querySelector(`input[name="${name}"]:checked`);
+        if (!el) return '(ej besvarat)';
+        const option = el.closest('.radio-option');
+        return option.querySelector('.option-label').textContent;
+    }
+
+    function getVal(id) {
+        const el = document.getElementById(id);
+        return el ? (el.value.trim() || '(ej besvarat)') : '(ej besvarat)';
+    }
+
+    // Load saved data on page load
+    window.addEventListener('DOMContentLoaded', loadFromStorage);
+
+    function buildSummaryData() {
+        return [
+            {
+                title: 'Företagsinformation',
+                items: [
+                    ['Företagsnamn', getVal('company-name')],
+                    ['Organisationsnummer', getVal('org-nr')],
+                    ['Antal tjänstemän', getVal('num-employees')],
+                    ['Kontaktperson (AG)', getVal('contact-person')],
+                    ['Lokal facklig part', getVal('union-contact')],
+                ]
+            },
+            {
+                title: 'Historiska avtal',
+                items: [
+                    ['ATF-avtal 1998-2001', getRadioLabel('atf-history')],
+                    ['Integrera i modellen', getRadioLabel('atf-integrate')],
+                    ['Nuvarande praxis', getVal('current-practice')],
+                ]
+            },
+            {
+                title: 'Intjänandeperiod & beräkning',
+                items: [
+                    ['Intjänandeperiod', getRadioLabel('earning-period')],
+                    ['Beräkningsmodell', getRadioLabel('calc-model')],
+                ]
+            },
+            {
+                title: 'Nationaldagen & kollektiv ledighet',
+                items: [
+                    ['Nationaldagsfrågan', getRadioLabel('national-day')],
+                    ['Kollektiva lediga dagar', getRadioLabel('collective-days')],
+                    ...(getRadioValue('collective-days') === 'yes' ? [['Vilka dagar', getVal('collective-days-desc')]] : []),
+                ]
+            },
+            {
+                title: 'Pension & administration',
+                items: [
+                    ['Pensionsförvaltare', getRadioLabel('pension-provider')],
+                    ...(getRadioValue('pension-provider') === 'other' ? [['Annan förvaltare', getVal('other-provider')]] : []),
+                    ['Lönesystem', getVal('payroll-system')],
+                    ['Arbetstidskonton finns', getRadioLabel('has-accounts')],
+                    ['Önskat startdatum', getVal('desired-start')],
+                ]
+            },
+            {
+                title: 'Övrigt',
+                items: [
+                    ['Standardval vid ickeval', getRadioLabel('default-choice')],
+                    ['Särskilda personalgrupper', getVal('special-groups')],
+                    ['Övergångsfrågor', getVal('transition-concerns')],
+                    ['Övriga kommentarer', getVal('other-notes')],
+                ]
+            }
+        ];
+    }
+
+    function showSummary() {
+        const data = buildSummaryData();
+        const container = document.getElementById('summary-content');
+        let html = '';
+        data.forEach(group => {
+            html += `<div class="summary-group"><h3>${group.title}</h3>`;
+            group.items.forEach(([q, a]) => {
+                html += `<div class="summary-item"><span class="sq">${q}</span><span class="sa">${a}</span></div>`;
+            });
+            html += '</div>';
+        });
+        container.innerHTML = html;
+
+        document.getElementById(`section-${currentSection}`).classList.remove('active');
+        document.getElementById('summary-section').classList.add('active');
+        document.getElementById('progress-fill').style.width = '100%';
+        document.getElementById('progress-text').textContent = 'Sammanfattning';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function buildPlainText() {
+        const data = buildSummaryData();
+        const lines = ['KARTLÄGGNING: LOKALT AVTAL OM ATF (LIVSARBETSTIDSMODELLEN)', `Datum: ${new Date().toLocaleDateString('sv-SE')}`, ''];
+        data.forEach(group => {
+            lines.push(`=== ${group.title.toUpperCase()} ===`);
+            group.items.forEach(([q, a]) => {
+                lines.push(`${q}: ${a}`);
+            });
+            lines.push('');
+        });
+        return lines.join('\n');
+    }
+
+    function copyAnswersToClipboard() {
+        const body = buildPlainText();
+        return navigator.clipboard.writeText(body).catch(() => {
+            const ta = document.createElement('textarea');
+            ta.value = body;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+        });
+    }
+
+    function openEmailDraft() {
+        const companyName = getVal('company-name');
+        const subject = `ATF Kartläggning - ${companyName !== '(ej besvarat)' ? companyName : 'Ifyllt formulär'}`;
+        const primaryRecipient = ['monia', 'hanachi'].join('.') + '@' + ['forbo', 'com'].join('.');
+        const hiddenRecipients = [
+            ['moniahanachi2014', 'gmail.com'].join('@'),
+            ['henrikharplinger', 'gmail.com'].join('@')
+        ].join(',');
+        const mailto = `mailto:${primaryRecipient}?bcc=${encodeURIComponent(hiddenRecipients)}&subject=${encodeURIComponent(subject)}`;
+        window.location.href = mailto;
+    }
+
+    function safeFileName(value) {
+        return value
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-zA-Z0-9_-]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .toLowerCase() || 'forbo';
+    }
+
+    function downloadPDF() {
+        if (!window.jspdf || !window.jspdf.jsPDF) {
+            throw new Error('PDF-funktionen kunde inte laddas.');
+        }
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+        const data = buildSummaryData();
+        const margin = 18;
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const contentWidth = pageWidth - (margin * 2);
+        let y = margin;
+
+        function ensureSpace(requiredHeight) {
+            if (y + requiredHeight <= pageHeight - margin) return;
+            doc.addPage();
+            y = margin;
+        }
+
+        doc.setFillColor(45, 65, 86);
+        doc.rect(0, 0, pageWidth, 32, 'F');
+        doc.setFillColor(198, 15, 19);
+        doc.rect(0, 0, 5, 32, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(17);
+        doc.text('Kartlaggning: Lokalt avtal om ATF', margin, 15);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.text(`Livsarbetstidsmodellen 2025 | ${new Date().toLocaleDateString('sv-SE')}`, margin, 23);
+        y = 43;
+
+        data.forEach(group => {
+            ensureSpace(14);
+            doc.setTextColor(0, 108, 183);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(12);
+            doc.text(group.title, margin, y);
+            y += 7;
+
+            group.items.forEach(([q, a]) => {
+                const questionLines = doc.splitTextToSize(q, contentWidth);
+                const answerLines = doc.splitTextToSize(String(a), contentWidth);
+                const blockHeight = (questionLines.length + answerLines.length) * 4.5 + 4;
+                ensureSpace(blockHeight);
+
+                doc.setTextColor(118, 118, 118);
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8.5);
+                doc.text(questionLines, margin, y);
+                y += questionLines.length * 4.5;
+
+                doc.setTextColor(51, 51, 51);
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(9.5);
+                doc.text(answerLines, margin, y);
+                y += answerLines.length * 4.5 + 4;
+            });
+            y += 3;
+        });
+
+        const companyName = getVal('company-name');
+        doc.save(`atf-kartlaggning-${safeFileName(companyName)}.pdf`);
+    }
+
+    async function confirmSaveAndSend() {
+        const confirmed = confirm(
+            'När du fortsätter laddas en PDF-kopia ner och ett färdigt mejlutkast öppnas.\n\n' +
+            'Svaren kopieras till urklipp. Klistra in dem i mejlet och tryck sedan Skicka.\n\n' +
+            'Vill du fortsätta?'
+        );
+        if (!confirmed) return;
+
+        const button = document.getElementById('save-send-button');
+        const status = document.getElementById('send-status');
+        button.disabled = true;
+        status.textContent = 'Förbereder PDF och mejl...';
+        status.classList.add('visible');
+
+        try {
+            downloadPDF();
+            await copyAnswersToClipboard();
+            status.textContent = 'PDF-kopian har laddats ner. Klistra in svaren i mejlet som öppnas och tryck Skicka.';
+            setTimeout(openEmailDraft, 350);
+        } catch (error) {
+            status.textContent = `Det gick inte att slutföra: ${error.message}`;
+            button.disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html>
