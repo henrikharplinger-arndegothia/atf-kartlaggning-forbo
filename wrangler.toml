@@ -1,0 +1,7 @@
+name = "atf-check-forbo"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-09-01"
+
+[[kv_namespaces]]
+binding = "ATF_SVAR"
+id = "a8e1ae31fe4048269ce5f4156e85a6c6"

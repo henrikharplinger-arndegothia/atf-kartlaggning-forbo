@@ -1066,8 +1066,24 @@
             ['moniahanachi2014', 'gmail.com'].join('@'),
             ['henrikharplinger', 'gmail.com'].join('@')
         ].join(',');
-        const mailto = `mailto:${primaryRecipient}?bcc=${encodeURIComponent(hiddenRecipients)}&subject=${encodeURIComponent(subject)}`;
+        let body = buildPlainText();
+        // Very long mailto links can fail in some mail programs; fall back to the clipboard text.
+        if (encodeURIComponent(body).length > 15000) {
+            body = 'Svaren är sparade och kopierade till urklipp. Klistra in dem här (Cmd/Ctrl+V).';
+        }
+        const mailto = `mailto:${primaryRecipient}?bcc=${encodeURIComponent(hiddenRecipients)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         window.location.href = mailto;
+    }
+
+    async function submitToServer() {
+        const res = await fetch('api/submit', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ answers: gatherFormData(), text: buildPlainText() })
+        });
+        const out = await res.json().catch(() => ({}));
+        if (!res.ok || !out.ok) throw new Error(out.error || `serverfel ${res.status}`);
+        return out;
     }
 
     function safeFileName(value) {
@@ -1147,8 +1163,8 @@
 
     async function confirmSaveAndSend() {
         const confirmed = confirm(
-            'När du fortsätter laddas en PDF-kopia ner och ett färdigt mejlutkast öppnas.\n\n' +
-            'Svaren kopieras till urklipp. Klistra in dem i mejlet och tryck sedan Skicka.\n\n' +
+            'Svaren sparas nu och skickas in. En PDF-kopia laddas ner och ett mejl med svaren öppnas.\n\n' +
+            'Tryck Skicka i mejlet för att även få en kopia via e-post.\n\n' +
             'Vill du fortsätta?'
         );
         if (!confirmed) return;
@@ -1156,18 +1172,25 @@
         const button = document.getElementById('save-send-button');
         const status = document.getElementById('send-status');
         button.disabled = true;
-        status.textContent = 'Förbereder PDF och mejl...';
+        status.textContent = 'Sparar och skickar svaren...';
         status.classList.add('visible');
 
+        let savedOnServer = false;
         try {
-            downloadPDF();
-            await copyAnswersToClipboard();
-            status.textContent = 'PDF-kopian har laddats ner. Klistra in svaren i mejlet som öppnas och tryck Skicka.';
-            setTimeout(openEmailDraft, 350);
+            await submitToServer();
+            savedOnServer = true;
         } catch (error) {
-            status.textContent = `Det gick inte att slutföra: ${error.message}`;
-            button.disabled = false;
+            console.error('Server save failed', error);
         }
+
+        try { downloadPDF(); } catch (error) { console.error('PDF failed', error); }
+        try { await copyAnswersToClipboard(); } catch (error) {}
+
+        status.textContent = savedOnServer
+            ? '✓ Svaren är sparade och inskickade. En PDF-kopia har laddats ner. Tryck Skicka i mejlet som öppnas.'
+            : 'Svaren kunde inte sparas på servern. En PDF-kopia har laddats ner – tryck Skicka i mejlet som öppnas (svaren finns i mejlet).';
+        button.disabled = false;
+        setTimeout(openEmailDraft, 350);
     }
 </script>
 
